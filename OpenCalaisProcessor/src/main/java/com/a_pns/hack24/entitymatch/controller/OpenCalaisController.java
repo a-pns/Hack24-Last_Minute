@@ -86,21 +86,22 @@ public class OpenCalaisController {
 				JSONObject newEntity = new JSONObject();
 				JSONArray prefixes = new JSONArray();
 				JSONArray suffixes = new JSONArray();
-				for (int i = 0; i < instances.length(); i++) {
+				for (int i = 0; i < instances.length(); i++) 
+				{
 					{
 						JSONObject tmpJsonObj = instances.getJSONObject(i);
 						prefixes.put(tmpJsonObj.getString("prefix"));
 						suffixes.put(tmpJsonObj.getString("suffix"));
 					}
 
-					newEntity.put("name", name);
-					newEntity.put("type", type);
 					newEntity.put("textBeforeRefs", prefixes);
 					newEntity.put("textAfterRefs", suffixes);
-					newEntity.put("tag", "entity" + indexNum);
-					arrayOfEntities.put(newEntity);
-					indexNum++;
 				}
+				newEntity.put("name", name);
+				newEntity.put("type", type);
+				newEntity.put("tag", "entity" + indexNum);
+				arrayOfEntities.put(newEntity);
+				indexNum++;
 			}
 		}
 		responseJson.put("entities", arrayOfEntities);
