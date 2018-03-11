@@ -159,8 +159,11 @@ public class OpenCalaisController {
 			}
 		}
 		content = content.replace("\r\n", "");
+		content = content.replace("\n", "");
+		content = content.replace("\r", "");
 		return content;
 	}
+	
 	public JSONObject createResponse(String html, JSONObject entityInformation) throws JSONException
 	{
 		JSONObject json = new JSONObject();
