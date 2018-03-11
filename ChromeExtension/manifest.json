@@ -1,14 +1,14 @@
 {
-  "name": "CONTiDAYS",
+  "name": "ReLight",
   "description": "Display more information medical treatments and conditions on eLife articles",
   "version": "1.0",
   "permissions": [
-    "https://www.facebook.com/",
-    "http://www.facebook.com/",
+    "https://www.elifesciences.org/",
+    "http://www.elifesciences.org/",
     "tabs"
   ],
   "page_action": {
-     "default_title": "CONTiDAYS"
+     "default_title": "ReLight"
   },
   "background": {
     "scripts": ["run.js"],
