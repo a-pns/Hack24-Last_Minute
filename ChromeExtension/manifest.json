@@ -18,7 +18,8 @@
   "content_scripts": [
  {
    "matches": ["http://*.elifesciences.org/*", "https://*.elifesciences.org/*"],
-   "js": ["extension.js"]
+   "js": ["extension.js"],
+   "css": ["widget.css"]
  }],
   "manifest_version": 2
 }
