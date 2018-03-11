@@ -62,9 +62,9 @@ document.getElementById('contextParseWidget').addEventListener('click', function
           }, 3000);
         }
       }//if(this.readyState == 4 && this.status == 200)
-      xmlhttp.open("POST", url, true);
-      xmlhttp.send(document.getElementsByClassName("content-container")[0].innerHTML);
     };
+    xmlhttp.open("POST", url, true);
+    xmlhttp.send(document.getElementsByClassName("content-container")[0].innerHTML);
     contextParseWidgetClicked = true;
   }
 });
