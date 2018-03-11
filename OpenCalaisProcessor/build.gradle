@@ -30,6 +30,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile 'org.json:json:20160212'
 	compile 'com.google.code.gson:gson'
+	compile group: 'org.jsoup', name: 'jsoup', version: '1.8.3'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
 }

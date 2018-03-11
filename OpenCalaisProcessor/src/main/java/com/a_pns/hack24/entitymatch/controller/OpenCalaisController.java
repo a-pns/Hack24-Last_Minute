@@ -51,7 +51,6 @@ public class OpenCalaisController {
 	@RequestMapping(name = "/", method = RequestMethod.POST)
 	public ResponseEntity<String> parseContentAndReturnInformation(@RequestBody String body) throws JSONException {
 		JSONObject calais = sendOpenCalaisRequest(body);
-		System.out.println(calais);
 		JSONObject entities = parseResponseToGetEntities(calais);
 		processItalicizedQueries(entities, body);
 		JSONObject entityInformation = sendInfoGatheringRequest(entities);
@@ -67,7 +66,7 @@ public class OpenCalaisController {
 		headers.add("outputFormat", outputFormat);
 		headers.add("x-ag-access-token", xAgAccessToken);
 		headers.add("x-calais-language", xCalaisLanguage);
-
+		
 		entity = new HttpEntity<>(content, headers);
 
 		ResponseEntity<String> response = HTTPClient.postForEntity(openCalaisApiUrl, entity, String.class);
@@ -96,7 +95,6 @@ public class OpenCalaisController {
 				)
 				
 			{
-				System.out.println(response.getJSONObject(key).opt("_typeGroup"));
 				JSONObject entity = response.getJSONObject(key);
 				String name = entity.getString("name");
 				String type = null;
@@ -133,6 +131,7 @@ public class OpenCalaisController {
 				newEntity.put("name", name);
 				newEntity.put("type", type);
 				newEntity.put("tag", "entity" + indexNum);
+				newEntity.put("tag_id", indexNum);
 				arrayOfEntities.put(newEntity);
 				indexNum++;
 			}
@@ -157,7 +156,15 @@ public class OpenCalaisController {
 		{
 	    	names.add(entityArray.getJSONObject(i).getString("name").trim());
 		}
+	    int highestNumber = 0;
+	   	for (int j = 0; j < entityArray.length(); j++)
+	   	{
+	   		int num = entityArray.getJSONObject(j).getInt("tag_id");
+	   		if (num > highestNumber)
+	   			highestNumber = num;
+	   	}
 	    
+	   	int index = highestNumber + 1;
 	    matchedValues.removeAll(names);
 	    for (String value: matchedValues)
 	    {
@@ -172,8 +179,10 @@ public class OpenCalaisController {
 		    	JSONArray array2 = new JSONArray();
 		    	array2.put("");
 				newEntity.put("textAfterRefs", array2);
-				newEntity.put("tag", "entity9");
+				newEntity.put("tag", "entity" + index);
+				newEntity.put("tag_id", index);
 		    	entityArray.put(newEntity);
+		    	index++;
 	    	}
 	    }
 		return entities;
