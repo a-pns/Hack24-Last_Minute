@@ -2,7 +2,7 @@ import json
 from flask import jsonify
 from flask import request
 # rename dummyMethod to your method
-from app.search import dummyMethod
+from app.search import search_bing_api
 from app.elife_api import search_entities_on_elife
 
 def search_entities():
@@ -10,6 +10,6 @@ def search_entities():
     decodedData = data.decode('UTF-8')
     jsonBody = json.loads(decodedData)
     # Replace the dummyMethod
-    jsonToReturn = dummyMethod(jsonBody)
-    search_entities_on_elife(jsonToReturn)
-    return jsonify(jsonToReturn)
+    search_bing_api(jsonBody)
+    search_entities_on_elife(jsonBody)
+    return jsonify(jsonBody)
