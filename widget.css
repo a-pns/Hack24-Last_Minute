@@ -1,0 +1,50 @@
+#contextParseWidget{
+  position: fixed;
+  bottom: 10px;
+  right: 30px;
+  border-radius: 5px;
+  background-color: teal;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 99999999999999999999;
+}
+[class^='entity'] {
+  padding: 5px;
+}
+.entity1 {
+  background-color: rgba(255,0,0,0.3);
+}
+span.entity2 {
+  background-color: rgba(128,0,0,0.3);
+}
+span.entity3 {
+  background-color: rgba(50,0,0,0.3);
+}
+span.entity4 {
+  background-color: rgba(0,50,0,0.3);
+}
+span.entity5 {
+  background-color: rgba(0,128,0,0.3);
+}
+span.entity6 {
+  background-color: rgba(0,255,0,0.3);
+}
+span.entity7 {
+  background-color: rgba(0,0,255,0.3);
+}
+span.entity8 {
+  background-color: rgba(0,0,128,0.3);
+}
+span.entity9 {
+  background-color: rgba(0,0,50,0.3);
+}
+span.entity10 {
+  background-color: rgba(255,255,0,0.3);
+}
+span.entity11 {
+  background-color: rgba(255,0,255,0.3);
+}
+span.entity12 {
+  background-color: rgba(0,255,255,0.3);
+}
