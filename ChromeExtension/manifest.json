@@ -1,0 +1,24 @@
+{
+  "name": "CONTiDAYS",
+  "description": "Display more information medical treatments and conditions on eLife articles",
+  "version": "1.0",
+  "permissions": [
+    "https://www.facebook.com/",
+    "http://www.facebook.com/",
+    "tabs"
+  ],
+  "page_action": {
+     "default_title": "CONTiDAYS"
+  },
+  "background": {
+    "scripts": ["run.js"],
+    "persistent": false
+  },
+
+  "content_scripts": [
+ {
+   "matches": ["http://*.elifesciences.org/*", "https://*.elifesciences.org/*"],
+   "js": ["extension.js"]
+ }],
+  "manifest_version": 2
+}
