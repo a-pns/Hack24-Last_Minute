@@ -1,4 +1,4 @@
-#contextParseWidget{
+#contextParseWidget {
   position: fixed;
   bottom: 10px;
   right: 30px;
@@ -8,6 +8,46 @@
   padding: 10px;
   cursor: pointer;
   z-index: 99999999999999999999;
+}
+#widgetBox {
+  position: fixed;
+  top: 0;
+  left: -25%;
+  width: 25%;
+  height: 100%;
+  transition: .5s left;
+  background-color: #f1f1f1;
+  border-right: 2px solid #003b76;
+  padding: 10px;
+  z-index: 99999999999999999999;
+  font-size: 12px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+#widgetBox.show {
+  left: 0%;
+}
+#widgetBox .title {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#widgetBox .subtitle {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+#widgetBox .link {
+  display: block;
+  margin-top: 5px;
+}
+#widgetBox .link:first-child {
+  margin-top: 0;
+}
+#widgetBox hr {
+  width: 70%;
+  height: 1px;
+  border: 0;
+  background-color: #777;
+  margin: 10px auto;
 }
 [class^='entity'] {
   padding: 5px;
