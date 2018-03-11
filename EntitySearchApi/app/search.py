@@ -2,7 +2,7 @@ import http.client, urllib.parse
 import json
 
 
-subscriptionKey = '5a3cd3d67c67466ca30a2816510913e1'
+subscriptionKey = 'PLEASE_REPLACE_WITH_SUBSCRIPTION_KEY'
 host = 'api.cognitive.microsoft.com'
 path = '/bing/v7.0/entities/'
 
