@@ -1,6 +1,7 @@
 //Place script that manipulates document here
 var newData;
 var entityClicked = false;
+var viewerIsShowing = false;
 var contextParseWidgetClicked = false;
 
 var div=document.createElement("div");
@@ -11,6 +12,11 @@ div.id = 'contextParseWidget';
 var widgetBox=document.createElement("div");
 document.body.insertBefore(widgetBox, document.body.firstChild);
 widgetBox.id = 'widgetBox';
+
+var loaderWrapper=document.createElement("div");
+document.body.insertBefore(loaderWrapper, document.body.firstChild);
+loaderWrapper.id = 'loader-wrapper';
+loaderWrapper.innerHTML = '<div class="square-holder"><div class="square"></div></div>';
 
 document.getElementById('contextParseWidget').addEventListener('click', function() {
   var thisEl = $('#contextParseWidget');
@@ -52,6 +58,14 @@ document.getElementById('contextParseWidget').addEventListener('click', function
           });
         }
         document.querySelectorAll('[class^="entity"]').forEach(entity => entity.addEventListener('click', entityClickHandler));
+        if(!$('#loader-wrapper').hasClass('show')) {
+          $('#loader-wrapper').addClass('show');
+          $('body').css('overflow', 'hidden');
+          setTimeout(function(){
+            $('#loader-wrapper').removeClass('show');
+            $('body').css('overflow', 'auto');
+          }, 3000);
+        }
       //}//if(this.readyState == 4 && this.status == 200)
       // xmlhttp.open("POST", url, true);
       // xmlhttp.send(document.getElementsByClassName("content-container")[0].innerHTML);
@@ -60,13 +74,13 @@ document.getElementById('contextParseWidget').addEventListener('click', function
   }
 });
 
-// $('body').on('click', '[class^=entity]', function() {
 function entityClickHandler() {
   if(entityClicked) {
     if($('#widgetBox').hasClass('show')) {
       $('#widgetBox').removeClass('show');
     }
     entityClicked = false;
+    viewerIsShowing = false;
     return;
   }
   var currentEntity = $(this).attr('class');
@@ -86,10 +100,12 @@ function entityClickHandler() {
           htmlContent += '<a class="link" target="_blank" href="' + entities[i]["eLife Links"][j].link + '">' + entities[i]["eLife Links"][j].title + '</a><br/>';
         }
       }
-
       $('#widgetBox').html(htmlContent);
-      if($('#widgetBox').hasClass('show') == false) {
-        $('#widgetBox').addClass('show');
+      if(!viewerIsShowing) {
+        if($('#widgetBox').hasClass('show') == false) {
+          $('#widgetBox').addClass('show');
+          viewerIsShowing = true;
+        }
       }
     }
   }
