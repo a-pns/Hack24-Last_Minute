@@ -38,7 +38,7 @@ public class OpenCalaisController {
 	// outputFormat
 	private String outputFormat = "application/json";
 	// x-ag-access-token - mandatory
-	private String xAgAccessToken = "qikmMMCy8qF1muU89uZJV2O5fFAlELnd";
+	private String xAgAccessToken = "REPLACE_WITH_OPEN_CALAIS_API_KEY;
 	// x-calais-language
 	private String xCalaisLanguage = "English";
 	// x-calais-selectiveTags
