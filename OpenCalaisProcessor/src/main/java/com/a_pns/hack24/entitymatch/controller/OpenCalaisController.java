@@ -126,22 +126,10 @@ public class OpenCalaisController {
 			JSONObject entity = entities.getJSONObject(i);
 			JSONArray prefixes = entity.getJSONArray("textBeforeRefs");
 			JSONArray suffixes = entity.getJSONArray("textAfterRefs");
-			for (int prefixIndex = 0; prefixIndex < prefixes.length(); prefixIndex++)
-			{
-				try
-				{
-					String tmpPrefix = prefixes.getString(prefixIndex);
-					String tmpSuffix = suffixes.getString(prefixIndex);
-				content = content.replace(
-						entity.getString("name")
-						,
-						"<span class=\""+className + i + "\">" + entity.getString("name") + "</span>");
-				}
-				catch (Exception ex)
-				{
-					throw ex;
-				}
-			}
+			content = content.replace(
+					entity.getString("name")
+					,
+					"<span class=\""+className + i + "\">" + entity.getString("name") + "</span>");
 		}
 		content = content.replace("\r\n", "");
 		content = content.replace("\n", "");
