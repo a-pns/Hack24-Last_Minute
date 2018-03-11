@@ -3,6 +3,7 @@ from flask import jsonify
 from flask import request
 # rename dummyMethod to your method
 from app.search import dummyMethod
+from app.elife_api import search_entities_on_elife
 
 def search_entities():
     data = request.get_data()
@@ -10,4 +11,5 @@ def search_entities():
     jsonBody = json.loads(decodedData)
     # Replace the dummyMethod
     jsonToReturn = dummyMethod(jsonBody)
+    search_entities_on_elife(jsonToReturn)
     return jsonify(jsonToReturn)
