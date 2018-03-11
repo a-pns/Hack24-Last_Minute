@@ -1,7 +1,13 @@
 package com.a_pns.hack24.entitymatch.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,10 +51,12 @@ public class OpenCalaisController {
 	@RequestMapping(name = "/", method = RequestMethod.POST)
 	public ResponseEntity<String> parseContentAndReturnInformation(@RequestBody String body) throws JSONException {
 		JSONObject calais = sendOpenCalaisRequest(body);
+		System.out.println(calais);
 		JSONObject entities = parseResponseToGetEntities(calais);
+		processItalicizedQueries(entities, body);
 		JSONObject entityInformation = sendInfoGatheringRequest(entities);
-		String taggedHtml = processHtmlAddTags(body, entities.getJSONArray("entities"));
-		JSONObject jsonResponse = createResponse(taggedHtml, entityInformation);
+		//String taggedHtml = processHtmlAddTags(body, entities.getJSONArray("entities"));
+		JSONObject jsonResponse = createResponse(entityInformation);
 		return new ResponseEntity<String>(jsonResponse.toString(), HttpStatus.OK);
 	}
 
@@ -75,27 +83,52 @@ public class OpenCalaisController {
 		while (responseKeys.hasNext()) {
 			String key = (String) responseKeys.next();
 			if (response.get(key) != null
-					&& "entities".equals(response.getJSONObject(key).opt("_typeGroup"))
-					&& Arrays.asList("MedicalCondition", "MedicalTreatment")
-					.contains(response.getJSONObject(key).opt("_type"))) {
+				&& 
+					(
+						"socialTag".equals(response.getJSONObject(key).opt("_typeGroup"))
+						||
+						(
+								"entities".equals(response.getJSONObject(key).opt("_typeGroup"))
+							&&
+								Arrays.asList("MedicalCondition", "MedicalTreatment", "Technology").contains(response.getJSONObject(key).opt("_type"))
+						)
+					)
+				)
+				
+			{
+				System.out.println(response.getJSONObject(key).opt("_typeGroup"));
 				JSONObject entity = response.getJSONObject(key);
-				JSONArray instances = entity.getJSONArray("instances");
 				String name = entity.getString("name");
-				String type = entity.getString("_type");
-
+				String type = null;
 				JSONObject newEntity = new JSONObject();
-				JSONArray prefixes = new JSONArray();
-				JSONArray suffixes = new JSONArray();
-				for (int i = 0; i < instances.length(); i++) 
+				if (response.getJSONObject(key).getString("_typeGroup").equalsIgnoreCase("socialtag"))
 				{
-					{
-						JSONObject tmpJsonObj = instances.getJSONObject(i);
-						prefixes.put(tmpJsonObj.getString("prefix"));
-						suffixes.put(tmpJsonObj.getString("suffix"));
-					}
+					type = entity.getString("_typeGroup");
+					JSONArray array1 = new JSONArray();
+					array1.put("");
+					JSONArray array2 = new JSONArray();
+					array2.put("");
+					newEntity.put("textBeforeRefs", array1);
+					newEntity.put("textAfterRefs", array2);
+				}
+				else
+				{
+					JSONArray instances = entity.getJSONArray("instances");
+					type = entity.getString("_type");
 
-					newEntity.put("textBeforeRefs", prefixes);
-					newEntity.put("textAfterRefs", suffixes);
+					JSONArray prefixes = new JSONArray();
+					JSONArray suffixes = new JSONArray();
+					for (int i = 0; i < instances.length(); i++) 
+					{
+						{
+							JSONObject tmpJsonObj = instances.getJSONObject(i);
+							prefixes.put(tmpJsonObj.getString("prefix"));
+							suffixes.put(tmpJsonObj.getString("suffix"));
+						}
+	
+						newEntity.put("textBeforeRefs", prefixes);
+						newEntity.put("textAfterRefs", suffixes);
+					}
 				}
 				newEntity.put("name", name);
 				newEntity.put("type", type);
@@ -110,7 +143,39 @@ public class OpenCalaisController {
 	
 	public JSONObject processItalicizedQueries(JSONObject entities, String requestBody)
 	{
-		
+		Pattern italicRegex = Pattern.compile("<i>(.+?)</i>");
+
+		Set<String> matchedValues = new HashSet<String>();
+		Matcher matcher = italicRegex.matcher(requestBody);
+	    while (matcher.find()) {
+	    	matchedValues.add(matcher.group(1).trim());
+	    }
+
+	    JSONArray entityArray =  entities.getJSONArray("entities");	
+	    Set<String> names = new HashSet<String>();
+	    for (int i = 0; i < entityArray.length(); i++)
+		{
+	    	names.add(entityArray.getJSONObject(i).getString("name").trim());
+		}
+	    
+	    matchedValues.removeAll(names);
+	    for (String value: matchedValues)
+	    {
+	    	if (value.split(" ").length <= 3 && value.trim().length() > 1)
+	    	{
+		    	JSONObject newEntity = new JSONObject();
+		    	newEntity.put("name", value);
+		    	newEntity.put("type", "Other");
+		    	JSONArray array1 = new JSONArray();
+		    	array1.put("");
+				newEntity.put("textBeforeRefs", array1);
+		    	JSONArray array2 = new JSONArray();
+		    	array2.put("");
+				newEntity.put("textAfterRefs", array2);
+				newEntity.put("tag", "entity9");
+		    	entityArray.put(newEntity);
+	    	}
+	    }
 		return entities;
 	}
 	
@@ -125,7 +190,7 @@ public class OpenCalaisController {
 		return json;
 	}
 	
-	public String processHtmlAddTags(String content, JSONArray entities) throws JSONException
+/*	public String processHtmlAddTags(String content, JSONArray entities) throws JSONException
 	{
 		String className = "entity";
 		for (int i = 0; i < entities.length(); i++)
@@ -142,13 +207,13 @@ public class OpenCalaisController {
 		content = content.replace("\n", "");
 		content = content.replace("\r", "");
 		return content;
-	}
+	}*/
 	
-	public JSONObject createResponse(String html, JSONObject entityInformation) throws JSONException
+	public JSONObject createResponse(JSONObject entityInformation) throws JSONException
 	{
 		JSONObject json = new JSONObject();
-		json.put("html", html);
 		json.put("entities", entityInformation);
 		return json;
 	}
+	
 }
