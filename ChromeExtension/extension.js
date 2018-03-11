@@ -24,7 +24,13 @@ document.getElementById('contextParseWidget').addEventListener('click', function
           var entities = newData.entities.entities;
           for (var i = 0; i < entities.length; i++)
           {
-            document.getElementsByClassName("content-container")[0].innerHTML = document.getElementsByClassName("content-container")[0].innerHTML.replace(entities[i].name, '<span class="'+entities[i].tag+'">'+entities[i].name+'</span>');
+            $("p").filter(function() {
+                console.log($(this).html().includes(entities[i].name))
+                return $(this).html().includes(entities[i].name);
+            }).each(function( index ) {
+              var changedText = $(this).html().replace(entities[i].name, '<span class="'+entities[i].tag+'">'+entities[i].name+'</span>');
+                $(this).html(changedText);
+            });
           }
       }
   };

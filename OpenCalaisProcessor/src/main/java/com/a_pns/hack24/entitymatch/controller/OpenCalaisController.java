@@ -108,6 +108,12 @@ public class OpenCalaisController {
 		return responseJson;
 	}
 	
+	public JSONObject processItalicizedQueries(JSONObject entities, String requestBody)
+	{
+		
+		return entities;
+	}
+	
 	public JSONObject sendInfoGatheringRequest(JSONObject entities) throws JSONException
 	{
 		HttpEntity entity;
