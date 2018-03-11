@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 node_modules
 gulpfile.js
 package-lock.json
 package.json
 test.js
+=======
+EntitySearch.java
+*.bak
+>>>>>>> 4130ef4640636d7218c9a32a1cb5ffb0ecb516e6
